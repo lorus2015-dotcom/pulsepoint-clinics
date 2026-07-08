@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import StaffManagement from "./StaffManagement";
 import BookAppointment from "./BookAppointment";
+import MyPatients from "./MyPatients";
 
 const roleLabels = {
   patient: "مريض",
@@ -17,6 +17,7 @@ export default function Dashboard({ session, onLogout }) {
   const [error, setError] = useState(null);
   const [showStaffManagement, setShowStaffManagement] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
+  const [showMyPatients, setShowMyPatients] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -39,6 +40,12 @@ export default function Dashboard({ session, onLogout }) {
   async function handleLogout() {
     await supabase.auth.signOut();
     onLogout();
+  }
+
+  if (showMyPatients) {
+    return (
+      <MyPatients session={session} onBack={() => setShowMyPatients(false)} />
+    );
   }
 
   if (showBooking) {
@@ -119,6 +126,15 @@ export default function Dashboard({ session, onLogout }) {
               ده Dashboard موحّد مبدئي لكل الأدوار. الخطوة الجاية هنخصص كل دور
               بشاشة وصلاحيات مختلفة (طبيب / ممرض / إداري / مريض).
             </p>
+
+            {profile.role === "doctor" && (
+              <button
+                style={styles.staffBtn}
+                onClick={() => setShowMyPatients(true)}
+              >
+                مرضاي
+              </button>
+            )}
 
             {profile.role === "patient" && (
               <button
