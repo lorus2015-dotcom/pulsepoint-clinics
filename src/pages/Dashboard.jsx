@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import StaffManagement from "./StaffManagement";
 
 const roleLabels = {
   patient: "مريض",
@@ -12,6 +13,7 @@ export default function Dashboard({ session, onLogout }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showStaffManagement, setShowStaffManagement] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -34,6 +36,26 @@ export default function Dashboard({ session, onLogout }) {
   async function handleLogout() {
     await supabase.auth.signOut();
     onLogout();
+  }
+
+  if (showStaffManagement) {
+    return (
+      <div>
+        <div style={styles.topBar}>
+          <div style={styles.brand}>
+            <span style={{ color: "#0B1E3D" }}>Pulse</span>
+            <span style={{ color: "#E8477A" }}>Point</span>
+          </div>
+          <button
+            style={styles.backBtn}
+            onClick={() => setShowStaffManagement(false)}
+          >
+            ← رجوع للوحة الرئيسية
+          </button>
+        </div>
+        <StaffManagement session={session} />
+      </div>
+    );
   }
 
   return (
@@ -88,6 +110,15 @@ export default function Dashboard({ session, onLogout }) {
               ده Dashboard موحّد مبدئي لكل الأدوار. الخطوة الجاية هنخصص كل دور
               بشاشة وصلاحيات مختلفة (طبيب / ممرض / إداري / مريض).
             </p>
+
+            {profile.role === "admin" && (
+              <button
+                style={styles.staffBtn}
+                onClick={() => setShowStaffManagement(true)}
+              >
+                إدارة الموظفين والأدوار
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -176,5 +207,26 @@ const styles = {
     color: "#C0392B",
     borderRadius: 10,
     fontWeight: 600,
+  },
+  staffBtn: {
+    marginTop: 20,
+    width: "100%",
+    padding: "13px 0",
+    borderRadius: 10,
+    border: "none",
+    background: "#1B3B6F",
+    color: "#ffffff",
+    fontSize: 15,
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  backBtn: {
+    padding: "8px 18px",
+    borderRadius: 8,
+    border: "1px solid #E2E8F0",
+    background: "#ffffff",
+    color: "#1B3B6F",
+    fontWeight: 700,
+    cursor: "pointer",
   },
 };
