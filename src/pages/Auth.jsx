@@ -121,7 +121,9 @@ export default function Auth({ onAuthSuccess }) {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="د. محمد فهمي أبورية"
+                placeholder="الاسم بالكامل"
+                autoComplete="off"
+                name="full-name-field"
               />
 
               <label style={styles.label}>رقم الموبايل (اختياري)</label>
@@ -131,6 +133,8 @@ export default function Auth({ onAuthSuccess }) {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="01xxxxxxxxx"
+                autoComplete="off"
+                name="phone-field"
               />
             </>
           )}
