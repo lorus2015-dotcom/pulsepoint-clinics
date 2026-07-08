@@ -83,11 +83,11 @@ export default function Auth({ onAuthSuccess }) {
 
   return (
     <div style={styles.page} dir="rtl">
-      <div style={styles.headerRow}>
+      <div style={styles.headerRow} dir="ltr">
+        <span style={styles.heart}>♥</span>
         <span style={styles.brandNavy}>Pulse</span>
         <span style={styles.brandPink}>Point</span>
         <span style={styles.brandNavy}> Clinics</span>
-        <span style={styles.heart}>♥</span>
       </div>
 
       <div style={styles.card}>
