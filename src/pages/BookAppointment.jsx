@@ -32,6 +32,15 @@ function toDateString(date) {
   return date.toISOString().split("T")[0];
 }
 
+function formatTimeLabel(time24) {
+  const [hourStr, minuteStr] = time24.split(":");
+  let hour = parseInt(hourStr, 10);
+  const period = hour >= 12 ? "م" : "ص";
+  hour = hour % 12;
+  if (hour === 0) hour = 12;
+  return `${hour}:${minuteStr} ${period}`;
+}
+
 export default function BookAppointment({ session, onBack }) {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -107,7 +116,7 @@ export default function BookAppointment({ session, onBack }) {
     }
 
     setSuccess(true);
-    setBookedTimeLabel(time);
+    setBookedTimeLabel(formatTimeLabel(time));
   }
 
   if (success) {
@@ -211,7 +220,7 @@ export default function BookAppointment({ session, onBack }) {
                   disabled={isBooked || booking}
                   onClick={() => handleBook(time)}
                 >
-                  {isBooked ? `${time} (محجوز)` : time}
+                  {isBooked ? `${formatTimeLabel(time)} (محجوز)` : formatTimeLabel(time)}
                 </button>
               );
             })}
